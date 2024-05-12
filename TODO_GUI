@@ -1,0 +1,53 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class TodoApplication extends JFrame {
+
+    private DefaultListModel<String> listModel;
+    private JList<String> taskList;
+    private JTextField taskInputField;
+    private JButton addButton, removeButton;
+
+    public TodoApplication() {
+        setTitle("To-Do Application");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centers the window
+
+        listModel = new DefaultListModel<>();
+        taskList = new JList<>(listModel);
+        taskInputField = new JTextField(20);
+        addButton = new JButton("Add Task");
+        removeButton = new JButton("Remove Task");
+
+        addButton.addActionListener(e -> addTask());
+        removeButton.addActionListener(e -> removeTask());
+
+        JPanel panel = new JPanel();
+        panel.add(taskInputField);
+        panel.add(addButton);
+        panel.add(removeButton);
+        getContentPane().add(panel, BorderLayout.SOUTH);
+        getContentPane().add(new JScrollPane(taskList), BorderLayout.CENTER);
+    }
+
+    private void addTask() {
+        if (!taskInputField.getText().trim().isEmpty()) {
+            listModel.addElement(taskInputField.getText().trim());
+            taskInputField.setText("");
+        }
+    }
+
+    private void removeTask() {
+        int selectedIndex = taskList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            listModel.remove(selectedIndex);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new TodoApplication().setVisible(true);
+        });
+    }
+}
